@@ -8,6 +8,41 @@ services:
     ports:
       - 8181:8080
       - 6066:6066
-      - 7077:7077
     environment:
       - SPARK_NO_DAEMONIZE=true
+    networks:
+      - clusterspark-network
+  
+  sparkworker01:
+    image: spark:latest
+    command: /opt/spark/sbin/start-worker.sh spark://sparkmaster:7077 -c 2 -m 2G
+    ports:
+      - 8081:8081
+    environment:
+      - SPARK_NO_DAEMONIZE=true
+    networks:
+      - clusterspark-network
+
+  sparkworker02:
+    image: spark:latest
+    command: /opt/spark/sbin/start-worker.sh spark://sparkmaster:7077 -c 2 -m 2G
+    ports:
+      - 8082:8081
+    environment:
+      - SPARK_NO_DAEMONIZE=true
+    networks:
+      - clusterspark-network
+
+  sparkworker03:
+    image: spark:latest
+    command: /opt/spark/sbin/start-slave.sh spark://sparkmaster:7077 -c 4 -m 4G
+    ports:
+      - 8083:8081
+    environment:
+      - SPARK_NO_DAEMONIZE=true
+    networks:
+      - clusterspark-network
+
+networks:
+  clusterspark-network:
+    driver: bridge

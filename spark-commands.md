@@ -104,5 +104,11 @@ docker compose -f spark-cluster.yml up -d
 Se connecter depuis un container spark-shell au cluster demarre avec docker compose
 
 ```bash
-docker run --rm --network clusterspark_default -it -p 4040:4040 spark /opt/spark/bin/spark-shell --master spark://172.19.0.2:7077
+docker run --rm --network clusterspark_clusterspark-network -it -p 4040:4040 spark /opt/spark/bin/spark-shell --master spark://sparkmaster:7077
+```
+
+Déployer la nouvelle application Count Lines sur le cluster Spark
+
+```bash
+docker run --rm --network clusterspark_clusterspark-network --name spark_submit_tmp -v "$(pwd)/simple_project_2/target/scala-2.12":/opt/spark/work-dir -it spark /opt/spark/bin/spark-submit --class CountLines --master "spark://sparkmaster:7077" /opt/spark/work-dir/count-lines_2.12-1.0.jar
 ```
