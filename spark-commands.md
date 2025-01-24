@@ -94,3 +94,15 @@ Utiliser l'application dans un nouveau container
 ```bash
 docker run --rm --name spark_submit_tmp -v "$(pwd)/simple_project/target/scala-2.12":/opt/spark/work-dir -it spark /opt/spark/bin/spark-submit --class SimpleApp --master "local[4]" /opt/spark/work-dir/simple-project_2.12-1.0.jar
 ```
+
+Démarrer un cluster spark défini dans le fichier docker compose spark-cluster.yml
+
+```bash
+docker compose -f spark-cluster.yml up -d
+```
+
+Se connecter depuis un container spark-shell au cluster demarre avec docker compose
+
+```bash
+docker run --rm --network clusterspark_default -it -p 4040:4040 spark /opt/spark/bin/spark-shell --master spark://172.19.0.2:7077
+```
